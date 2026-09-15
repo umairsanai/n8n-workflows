@@ -1,0 +1,126 @@
+{
+  "name": "Insert Random Number in Google Docs with Webhooks",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://livenums.onrender.com/random",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        112,
+        -48
+      ],
+      "id": "7c26dc15-4241-4de0-8bb9-10fca2b7eb8a",
+      "name": "Get the Random Number"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://livenums.onrender.com/random",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -80,
+        -48
+      ],
+      "id": "2cab6528-2f37-4504-bec9-cb733dd9d2fe",
+      "name": "Change Random Number on Server"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "https://docs.google.com/document/d/19Vv0oqEgDml1N5QpoNuugv3Zheld2LkCxmmIEsaZJNs/edit?tab=t.0",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "insert",
+              "text": "={{ $json.number }} "
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        336,
+        -48
+      ],
+      "id": "6e57b376-f045-4670-aa83-a5c210322b39",
+      "name": "Append the number in Google Docs document",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "QSgnvN9yMR38ABTH",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "dec6b4dc-7bcd-491a-9664-7e2b7607d098",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -304,
+        -48
+      ],
+      "id": "172d5203-1aa0-4639-bff7-f6c5038f8424",
+      "name": "Webhook",
+      "webhookId": "dec6b4dc-7bcd-491a-9664-7e2b7607d098"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get the Random Number": {
+      "main": [
+        [
+          {
+            "node": "Append the number in Google Docs document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Change Random Number on Server": {
+      "main": [
+        [
+          {
+            "node": "Get the Random Number",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Change Random Number on Server",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "cb834752-0764-4363-82e5-10b46daad707",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d7eb5dafc4cc548b21954d1f7b8d2f69d2e8a69357604dde09fc67f778716ea4"
+  },
+  "nodeGroups": [],
+  "id": "EZuYBTl1h5qAw2Hv",
+  "tags": []
+}

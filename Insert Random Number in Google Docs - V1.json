@@ -1,0 +1,122 @@
+{
+  "name": "Insert Random Number in Google Docs",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        -48
+      ],
+      "id": "8a200a96-6dd0-46cc-bc61-a35d65fde588",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://livenums.onrender.com/random",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        112,
+        -48
+      ],
+      "id": "c0757bd9-06a9-4a71-903e-b36131380a18",
+      "name": "Get the Random Number"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://livenums.onrender.com/random",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -112,
+        -48
+      ],
+      "id": "497d9496-b377-4416-9985-6f811e55cbf9",
+      "name": "Change Random Number on Server"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "https://docs.google.com/document/d/19Vv0oqEgDml1N5QpoNuugv3Zheld2LkCxmmIEsaZJNs/edit?tab=t.0",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "insert",
+              "text": "={{ $json.number }} "
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        336,
+        -48
+      ],
+      "id": "63130f30-72b3-4e2a-af08-b81a820cf9e3",
+      "name": "Append the number in Google Docs document",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "QSgnvN9yMR38ABTH",
+          "name": "Google Docs account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Change Random Number on Server",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get the Random Number": {
+      "main": [
+        [
+          {
+            "node": "Append the number in Google Docs document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Change Random Number on Server": {
+      "main": [
+        [
+          {
+            "node": "Get the Random Number",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c2057f44-6e37-4bb8-b024-4a406ce167c3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d7eb5dafc4cc548b21954d1f7b8d2f69d2e8a69357604dde09fc67f778716ea4"
+  },
+  "nodeGroups": [],
+  "id": "eEvnpJzd4sxrN9mR",
+  "tags": []
+}

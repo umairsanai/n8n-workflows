@@ -1,0 +1,155 @@
+{
+  "name": "Conditional Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "http://livenums.onrender.com/random",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -224,
+        -16
+      ],
+      "id": "3e07716a-9105-4a71-bf9a-17f5e4bc7bf3",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "91bcd548-4199-46f3-9f70-2615db54fb34",
+              "leftValue": "={{ $json.number }}",
+              "rightValue": 500,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        -16
+      ],
+      "id": "c225d433-251e-403e-9bab-585e8e6aabbf",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "http://10.1.218.218:3000?message=less-than-or-equal-to-500",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        288,
+        -112
+      ],
+      "id": "97f02972-74ce-416e-b6ad-3502ac34b0f5",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "url": "http://10.1.218.218:3000?message=greater-than-500",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        288,
+        64
+      ],
+      "id": "abd7e4e7-b716-4b94-9278-cd74b68609b6",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "seconds",
+              "secondsInterval": 5
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -464,
+        -16
+      ],
+      "id": "0ca41681-362e-440c-be77-7f2f03c28058",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "92570ff3-2e54-4dcb-b195-0ee7cc58cf4d",
+  "meta": {
+    "instanceId": "d7eb5dafc4cc548b21954d1f7b8d2f69d2e8a69357604dde09fc67f778716ea4"
+  },
+  "nodeGroups": [],
+  "id": "1JquL8WMfnbNO0Sl",
+  "tags": []
+}

@@ -1,0 +1,136 @@
+{
+  "name": "Editing and Updating Fields",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        -48
+      ],
+      "id": "a7b2668e-628a-48c0-ad55-d37ad7997cf1",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1PsiawPJvSK_qimCT6vEQUbvSbjbYYBQ90fxI2aRqGpU/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1PsiawPJvSK_qimCT6vEQUbvSbjbYYBQ90fxI2aRqGpU/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -272,
+        -48
+      ],
+      "id": "16d6134f-af9d-4239-bce4-cbfc5aafba27",
+      "name": "Reading Emails from Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "E5rd9t6j3dJeSSCk",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "83fd5cfb-756d-4478-b23c-e54990b41839",
+              "name": "email",
+              "value": "={{ $json.emails }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -48,
+        -48
+      ],
+      "id": "b605d584-538e-4f97-9873-ee64b4e3ec16",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "url": "=http://10.1.218.218:3000?message= {{ $json.email }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        176,
+        -48
+      ],
+      "id": "a4c0d30f-8e52-4266-b989-a4091972ba6a",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Reading Emails from Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reading Emails from Sheets": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "37fa5a1f-94b9-4d8d-a1d9-d8e0f2a847f4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d7eb5dafc4cc548b21954d1f7b8d2f69d2e8a69357604dde09fc67f778716ea4"
+  },
+  "nodeGroups": [],
+  "id": "zjrHa23S300ymb6t",
+  "tags": []
+}

@@ -1,0 +1,117 @@
+{
+  "name": "Sending Automated Emails",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        -48
+      ],
+      "id": "1e3c53bc-95d1-4871-b611-5b724587a987",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1PsiawPJvSK_qimCT6vEQUbvSbjbYYBQ90fxI2aRqGpU/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1PsiawPJvSK_qimCT6vEQUbvSbjbYYBQ90fxI2aRqGpU/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -272,
+        -48
+      ],
+      "id": "5148d6f2-c112-496c-8c3b-581d2a51cc74",
+      "name": "Reading Emails from Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "E5rd9t6j3dJeSSCk",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.emails }}",
+        "subject": "Mail from n8n",
+        "emailType": "text",
+        "message": "Hello There, An Email through n8n. With love from Umair!",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -48,
+        -48
+      ],
+      "id": "dce52e5a-d4ca-45d7-8776-6de57a319d31",
+      "name": "Sending Mail to processed emails",
+      "webhookId": "dc2656c2-0a5d-4312-92a0-795c9a31bd1d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "3iMDN1HFPNwqrK3u",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Reading Emails from Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reading Emails from Sheets": {
+      "main": [
+        [
+          {
+            "node": "Sending Mail to processed emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sending Mail to processed emails": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "79269d3a-33d8-49f0-b818-6c97fc24edfe",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d7eb5dafc4cc548b21954d1f7b8d2f69d2e8a69357604dde09fc67f778716ea4"
+  },
+  "nodeGroups": [],
+  "id": "zFASS1r55hh2HoLu",
+  "tags": []
+}

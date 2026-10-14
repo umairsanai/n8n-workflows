@@ -1,0 +1,185 @@
+{
+  "name": "Deleting Emails In Batches",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        0
+      ],
+      "id": "a0693770-8139-40b7-a7f1-d4e628cb0205",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 30,
+        "filters": {
+          "sender": "linkedin.com "
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -96,
+        0
+      ],
+      "id": "29f14bb8-7fbf-469c-bb69-a79b1404c2fe",
+      "name": "Get many messages",
+      "webhookId": "e36ed696-26ee-456c-8cf7-fd7004d8db0e",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 1000,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "3iMDN1HFPNwqrK3u",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "messageId": "={{ $json.id }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        128,
+        0
+      ],
+      "id": "a2413818-0f72-4350-87d2-364ff03ca91b",
+      "name": "Delete a message",
+      "webhookId": "fa655144-1be5-482c-821b-5fb3da9afc4f",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "3iMDN1HFPNwqrK3u",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "c00bd7f6-311b-40a8-a3b8-6b0641beffab",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -336,
+        -176
+      ],
+      "id": "3a341027-ccad-42d4-900e-743abc453143",
+      "name": "Webhook",
+      "webhookId": "c00bd7f6-311b-40a8-a3b8-6b0641beffab"
+    },
+    {
+      "parameters": {
+        "url": "http://192.168.0.104:3000/success",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        576,
+        0
+      ],
+      "id": "d509cb32-3913-417a-9c38-2496c123766b",
+      "name": "HTTP Request1",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "success"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        352,
+        0
+      ],
+      "id": "452e147c-281a-4e70-be53-baf88e9806cc",
+      "name": "Aggregate"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get many messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many messages": {
+      "main": [
+        [
+          {
+            "node": "Delete a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get many messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete a message": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "a47792c3-8919-4e2e-8fef-ca9c244cd343",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d7eb5dafc4cc548b21954d1f7b8d2f69d2e8a69357604dde09fc67f778716ea4"
+  },
+  "nodeGroups": [],
+  "id": "Bqyw56Y3H0exr9V3",
+  "tags": []
+}

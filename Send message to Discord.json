@@ -1,0 +1,177 @@
+{
+  "name": "Send message to Discord",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        -48
+      ],
+      "id": "146e5615-ecc3-4e0e-8821-fb1fefa55bc5",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1PsiawPJvSK_qimCT6vEQUbvSbjbYYBQ90fxI2aRqGpU/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1PsiawPJvSK_qimCT6vEQUbvSbjbYYBQ90fxI2aRqGpU/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -272,
+        -48
+      ],
+      "id": "c299f22f-bf72-4486-b97e-ffea8d08cb9c",
+      "name": "Reading Emails from Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "E5rd9t6j3dJeSSCk",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1353e93a-5a4d-49df-89a7-1dcf9d7ecec6",
+              "name": "email",
+              "value": "={{ $json.row_number - 1}}. {{ $json.emails }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -64,
+        -48
+      ],
+      "id": "cc32547f-f6c2-4f09-89c6-817bb2e77d9a",
+      "name": "Formating Output"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "email",
+              "renameField": true,
+              "outputFieldName": "emails"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        144,
+        -48
+      ],
+      "id": "41be571d-0a23-4224-b197-c911d610b9d8",
+      "name": "Aggregating Emails in One List"
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "=Hello, There!\nThe emails from the sheet are:\n\n{{ $json.emails.join(\"\\n\") }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        352,
+        -48
+      ],
+      "id": "d54e7f52-1e82-48ce-8327-a1ae456142e2",
+      "name": "Send Message on Discord",
+      "webhookId": "5f52b769-802c-469b-9a44-f9a0fc6cc771",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "n0h6GjC34K0G4JhF",
+          "name": "Discord Webhook account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Reading Emails from Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reading Emails from Sheets": {
+      "main": [
+        [
+          {
+            "node": "Formating Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formating Output": {
+      "main": [
+        [
+          {
+            "node": "Aggregating Emails in One List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregating Emails in One List": {
+      "main": [
+        [
+          {
+            "node": "Send Message on Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "3e111bb7-8379-4c15-acd4-9a05fa619b08",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d7eb5dafc4cc548b21954d1f7b8d2f69d2e8a69357604dde09fc67f778716ea4"
+  },
+  "nodeGroups": [],
+  "id": "MrlUUmwhEhmYQgdp",
+  "tags": []
+}
